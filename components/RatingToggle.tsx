@@ -4,11 +4,12 @@ import React, { memo } from "react";
 
 interface RatingToggleProps {
   label: string;
+  toggleLabel?: string;
   isActive: boolean;
   onToggle: () => void;
 }
 
-export const RatingToggle = memo(({ label, isActive, onToggle }: RatingToggleProps) => {
+export const RatingToggle = memo(({ label, toggleLabel = "18+ Adult Rated", isActive, onToggle }: RatingToggleProps) => {
   return (
     <div className="space-y-1">
       <label className="block text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 ml-1">
@@ -18,7 +19,7 @@ export const RatingToggle = memo(({ label, isActive, onToggle }: RatingTogglePro
         onClick={onToggle}
         className="flex items-center justify-between px-4 py-3 rounded-2xl bg-zinc-100/70 cursor-pointer select-none h-11"
       >
-        <span className="font-bold text-zinc-600 text-xs ml-0.5">18+ Adult Rated</span>
+        <span className="font-bold text-zinc-600 text-xs ml-0.5">{toggleLabel}</span>
         {/* Visual iOS Switch capsule */}
         <div
           className={`w-11 h-6 rounded-full p-0.5 transition-colors duration-150 ease-in-out ${

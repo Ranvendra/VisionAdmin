@@ -2,7 +2,12 @@
 
 import React, { memo } from "react";
 
-export const Header = memo(() => {
+interface HeaderProps {
+  title?: string;
+  subtitle?: string;
+}
+
+export const Header = memo(({ title = "Vision Stream Manager", subtitle = "Admin Sync Suite" }: HeaderProps) => {
   return (
     <header className="text-center mb-8">
       {/* iOS App Icon Branding (Glossy 3D Ribbon Play Icon) */}
@@ -54,10 +59,10 @@ export const Header = memo(() => {
       </div>
 
       <h1 className="text-2xl font-extrabold text-zinc-900 tracking-tight leading-none">
-        Vision Stream Manager
+        {title}
       </h1>
       <p className="text-xs text-zinc-400 mt-1.5 font-semibold">
-        Admin Sync Suite
+        {subtitle}
       </p>
     </header>
   );

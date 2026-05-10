@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserPlus } from "lucide-react";
+import Link from "next/link";
 import { Header } from "../components/Header";
 import { Toast } from "../components/Toast";
 import { FormInput } from "../components/FormInput";
@@ -74,8 +75,9 @@ export default function VisionStreamManager() {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 antialiased">
+    <main className="min-h-screen text-zinc-950 flex flex-col items-center justify-start pt-32 pb-12 px-4 sm:px-6 md:px-8 antialiased">
       <Toast message={toast.message} type={toast.type} onDismiss={() => setToast({ message: "", type: null })} />
+
       <div className="w-full max-w-lg bg-white border border-zinc-200/60 rounded-[32px] p-6 sm:p-10 shadow-[0_16px_48px_rgba(0,0,0,0.02)]">
         <Header />
         <form onSubmit={handleSubmit} className="space-y-5">
