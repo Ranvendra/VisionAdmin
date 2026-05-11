@@ -30,7 +30,7 @@ export default function MediaRequestsDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   
   const [loading, setLoading] = useState(true);
-  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [fulfillingIds, setFulfillingIds] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" | null }>({ message: "", type: null });
 
   const fetchRequests = useCallback(async (pageToFetch: number) => {
@@ -60,23 +60,23 @@ export default function MediaRequestsDashboard() {
     }
   }, [toast]);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`Authorize deletion for "${title}"?`)) return;
-    setDeletingIds((prev) => new Set([...prev, id]));
+  const handleFulfill = async (id: string, title: string) => {
+    if (!window.confirm(`Mark "${title}" as added/fulfilled?`)) return;
+    setFulfillingIds((prev) => new Set([...prev, id]));
     try {
-      const response = await fetch(`/api/requests/${id}`, { method: "DELETE" });
+      const response = await fetch(`/api/requests/${id}`, { method: "PATCH" });
       const data = await response.json();
       if (data.success) {
         setTimeout(() => {
           setRequests((prev) => prev.filter((req) => req._id !== id));
-          setDeletingIds((prev) => { const u = new Set(prev); u.delete(id); return u; });
+          setFulfillingIds((prev) => { const u = new Set(prev); u.delete(id); return u; });
           if (requests.length === 1 && currentPage > 1) setCurrentPage(prev => prev - 1);
           else fetchRequests(currentPage);
         }, 350);
-        setToast({ message: `Purge of "${title}" successful.`, type: "success" });
+        setToast({ message: `"${title}" committed to fulfilled ledger.`, type: "success" });
       } else { throw new Error(data.error || "Routine fail."); }
     } catch (err: any) {
-      setDeletingIds((prev) => { const u = new Set(prev); u.delete(id); return u; });
+      setFulfillingIds((prev) => { const u = new Set(prev); u.delete(id); return u; });
       setToast({ message: err.message, type: "error" });
     }
   };
@@ -132,8 +132,8 @@ export default function MediaRequestsDashboard() {
                     key={req._id} 
                     req={req} 
                     idx={idx} 
-                    isDeleting={deletingIds.has(req._id)} 
-                    onDelete={handleDelete} 
+                    isFulfilling={fulfillingIds.has(req._id)} 
+                    onFulfill={handleFulfill} 
                     formatDate={formatDate} 
                   />
                 ))}

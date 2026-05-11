@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import { Trash, Film, Tv, Calendar, User, Clapperboard, Loader2 } from "lucide-react";
+import { Check, Film, Tv, Calendar, User, Clapperboard, Loader2 } from "lucide-react";
 
 interface MovieRequestItem {
   _id: string;
@@ -16,16 +16,16 @@ interface MovieRequestItem {
 interface RequestCardProps {
   req: MovieRequestItem;
   idx: number;
-  isDeleting: boolean;
-  onDelete: (id: string, title: string) => void;
+  isFulfilling: boolean;
+  onFulfill: (id: string, title: string) => void;
   formatDate: (date: string) => string;
 }
 
-export const RequestCard = memo(({ req, idx, isDeleting, onDelete, formatDate }: RequestCardProps) => {
+export const RequestCard = memo(({ req, idx, isFulfilling, onFulfill, formatDate }: RequestCardProps) => {
   return (
     <div
       className={`group h-full relative w-full bg-white/75 backdrop-blur-3xl rounded-[32px] flex items-stretch gap-4 p-3 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.06),inset_0_0_0_1px_rgba(255,255,255,0.7)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden animate-in fade-in slide-in-from-bottom-4
-      ${isDeleting ? "scale-[0.93] opacity-0 blur-md pointer-events-none" : "scale-100 opacity-100 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.1)]"}
+      ${isFulfilling ? "scale-[0.93] opacity-0 blur-md pointer-events-none" : "scale-100 opacity-100 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.1)]"}
       `}
       style={{ animationDelay: `${idx * 60}ms` }}
     >
@@ -102,17 +102,21 @@ export const RequestCard = memo(({ req, idx, isDeleting, onDelete, formatDate }:
         </div>
       </div>
 
-      {/* Specialized Minimalist Delete Vector */}
-      <div className="shrink-0 self-center pr-2 z-10">
+      {/* Specialized Apple-Style 'Added' (Fulfill) Action */}
+      <div className="shrink-0 self-center pr-1.5 z-10">
         <button
-          onClick={() => onDelete(req._id, req.title)}
-          disabled={isDeleting}
-          className="w-12 h-12 rounded-[22px] flex items-center justify-center bg-white border border-zinc-100 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.06)] hover:bg-[#FF3B30] hover:border-[#FF3B30] hover:text-white text-zinc-400 hover:shadow-[0_8px_24px_-4px_rgba(255,59,48,0.35)] active:scale-90 transition-all duration-300 disabled:opacity-50 cursor-pointer group/trash"
+          onClick={() => onFulfill(req._id, req.title)}
+          disabled={isFulfilling}
+          className="h-10 px-4 rounded-full flex items-center justify-center gap-2 bg-[#34C759] hover:bg-[#30B651] text-white shadow-[0_6px_16px_-4px_rgba(52,199,89,0.45)] active:scale-[0.94] transition-all duration-300 disabled:opacity-50 cursor-pointer group/fulfill relative overflow-hidden"
         >
-          {isDeleting ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/fulfill:opacity-100 transition-opacity duration-300" />
+          {isFulfilling ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            <Trash className="w-4.5 h-4.5 stroke-[1.6px] group-hover/trash:scale-110 transition-transform duration-300" />
+            <>
+              <Check className="w-4 h-4 stroke-[2.5px] group-hover/fulfill:scale-110 transition-transform duration-300" />
+              <span className="text-[11px] font-extrabold tracking-widest uppercase drop-shadow-sm hidden sm:inline-block">Added</span>
+            </>
           )}
         </button>
       </div>

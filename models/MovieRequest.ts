@@ -6,6 +6,7 @@ export interface IMovieRequest extends Document {
   title: string;
   posterPath?: string;
   mediaType: 'movie' | 'tv';
+  status: 'pending' | 'fulfilled';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,6 +33,11 @@ const MovieRequestSchema = new Schema<IMovieRequest>(
       type: String, 
       enum: ['movie', 'tv'], 
       required: true 
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'fulfilled'],
+      default: 'pending'
     }
   },
   { 

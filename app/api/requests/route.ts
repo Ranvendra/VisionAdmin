@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     const [total, requests] = await Promise.all([
-      MovieRequest.countDocuments({}),
-      MovieRequest.find({})
+      MovieRequest.countDocuments({ status: { $ne: 'fulfilled' } }),
+      MovieRequest.find({ status: { $ne: 'fulfilled' } })
         .populate('userId', 'username')
         .sort({ createdAt: -1 })
         .skip(skip)
