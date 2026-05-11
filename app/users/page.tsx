@@ -76,7 +76,7 @@ export default function VisionUserManager() {
   };
 
   return (
-    <main className="min-h-screen text-zinc-950 flex flex-col items-center justify-start pt-32 pb-12 px-4 sm:px-6 md:px-8 antialiased">
+    <main className="flex-1 overflow-y-auto w-full flex flex-col items-center justify-center py-8 px-4 sm:px-6 md:px-8 antialiased bg-[#F5F5F7]">
       <Toast message={toast.message} type={toast.type} onDismiss={() => setToast({ message: "", type: null })} />
 
       <div className="w-full max-w-lg bg-white border border-zinc-200/60 rounded-[32px] p-6 sm:p-10 shadow-[0_16px_48px_rgba(0,0,0,0.02)]">
@@ -128,9 +128,7 @@ export default function VisionUserManager() {
         </form>
       </div>
 
-      <footer className="mt-8 text-center text-[10px] text-zinc-400 font-mono tracking-widest uppercase">
-        © {new Date().getFullYear()} Vision Admin Suite • iOS v1.6.0
-      </footer>
+
     </main>
   );
 }

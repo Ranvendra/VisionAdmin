@@ -3,42 +3,46 @@
 import React, { memo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Play, UserRound } from "lucide-react";
+import { Play, UserRound, Inbox } from "lucide-react";
 
 export const Navigation = memo(() => {
   const pathname = usePathname();
-  const isUsers = pathname === "/users";
   const isStreams = pathname === "/";
+  const isUsers = pathname === "/users";
+  const isRequests = pathname === "/requests";
+
+  const navItems = [
+    { href: "/", label: "Streams", active: isStreams, Icon: Play },
+    { href: "/users", label: "Users", active: isUsers, Icon: UserRound },
+    { href: "/requests", label: "Requests", active: isRequests, Icon: Inbox },
+  ];
 
   return (
-    <div className="fixed top-8 left-0 right-0 z-50 flex justify-center pointer-events-none">
-      {/* Minimal slim pill container */}
-      <div className="inline-flex p-1 bg-white/60 backdrop-blur-2xl rounded-full border border-white/80 shadow-[0_4px_24px_rgba(0,0,0,0.04)] pointer-events-auto">
-        <Link
-          href="/"
-          className={`relative flex items-center gap-2 px-5 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ${
-            isStreams
-              ? "bg-blue-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)]"
-              : "text-zinc-400 hover:text-zinc-800 hover:bg-zinc-50/50"
-          }`}
-        >
-          <Play className={`w-3 h-3 ${isStreams ? "fill-white" : "opacity-50"}`} />
-          Streams
-        </Link>
-        
-        <Link
-          href="/users"
-          className={`relative flex items-center gap-2 px-5 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ${
-            isUsers
-              ? "bg-blue-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)]"
-              : "text-zinc-400 hover:text-zinc-800 hover:bg-zinc-50/50"
-          }`}
-        >
-          <UserRound className={`w-3.5 h-3.5 ${isUsers ? "fill-white" : "opacity-50"}`} />
-          Users
-        </Link>
+    <header className="w-full shrink-0 z-20 relative flex justify-center items-center h-20 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl border-b border-zinc-200/40 dark:border-zinc-800/40 shadow-[0_2px_16px_-4px_rgba(0,0,0,0.02)] px-6">
+      {/* Premium Pill Dashboard Navigation */}
+      <div className="flex p-1 bg-zinc-100/80 dark:bg-zinc-800/50 rounded-full border border-zinc-200/40 dark:border-zinc-700/30 shadow-sm">
+        {navItems.map(({ href, label, active, Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`group relative flex items-center gap-2 px-4 py-2.5 sm:px-6 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ease-out active:scale-95 ${
+              active
+                ? "bg-[#007AFF] text-white shadow-[0_4px_16px_-4px_rgba(0,122,255,0.4)]"
+                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
+            }`}
+          >
+            <Icon 
+              className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 ${
+                active ? "fill-white/10 stroke-[2.5px]" : "opacity-60 group-hover:opacity-100"
+              }`} 
+            />
+            <span className="hidden xs:inline-block">{label}</span>
+            {/* Responsive view: only icons on smallest screens can be done by removing hidden xs:inline-block but let's keep it simple first. Oh, wait, actually just show text and optimize padding */}
+            <span className="sm:hidden">{/* Fallback if we decide to hide text, but currently I'll show both */}</span>
+          </Link>
+        ))}
       </div>
-    </div>
+    </header>
   );
 });
 
