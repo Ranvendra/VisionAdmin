@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import { Check, Film, Tv, Calendar, User, Clapperboard, Loader2 } from "lucide-react";
+import { Film, Tv, Calendar, User, Clapperboard, Loader2 } from "lucide-react";
 
 interface MovieRequestItem {
   _id: string;
@@ -113,10 +113,9 @@ export const RequestCard = memo(({ req, idx, isFulfilling, onFulfill, formatDate
           {isFulfilling ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            <>
-              <Check className="w-4 h-4 stroke-[2.5px] group-hover/fulfill:scale-110 transition-transform duration-300" />
-              <span className="text-[11px] font-extrabold tracking-widest uppercase drop-shadow-sm hidden sm:inline-block">Added</span>
-            </>
+            <span className="text-[10px] font-extrabold tracking-widest uppercase drop-shadow-sm whitespace-nowrap">
+              FULFILL
+            </span>
           )}
         </button>
       </div>
