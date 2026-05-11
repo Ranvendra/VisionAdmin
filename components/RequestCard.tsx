@@ -24,7 +24,7 @@ interface RequestCardProps {
 export const RequestCard = memo(({ req, idx, isDeleting, onDelete, formatDate }: RequestCardProps) => {
   return (
     <div
-      className={`group flex-1 min-h-0 relative w-full bg-white/75 backdrop-blur-3xl rounded-[32px] flex items-stretch gap-4 p-3 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.06),inset_0_0_0_1px_rgba(255,255,255,0.7)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden animate-in fade-in slide-in-from-bottom-4
+      className={`group h-full relative w-full bg-white/75 backdrop-blur-3xl rounded-[32px] flex items-stretch gap-4 p-3 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.06),inset_0_0_0_1px_rgba(255,255,255,0.7)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden animate-in fade-in slide-in-from-bottom-4
       ${isDeleting ? "scale-[0.93] opacity-0 blur-md pointer-events-none" : "scale-100 opacity-100 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.1)]"}
       `}
       style={{ animationDelay: `${idx * 60}ms` }}
