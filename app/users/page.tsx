@@ -7,15 +7,17 @@ import { Toast } from "@/components/Toast";
 import { FormInput } from "@/components/FormInput";
 import { RatingToggle } from "@/components/RatingToggle";
 import { DeviceSelector } from "@/components/DeviceSelector";
+import { usePreservedForm } from "@/hooks/usePreservedForm";
 
 export default function VisionUserManager() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAdult, setIsAdult] = useState(false);
-  const [maxDevicesAllowed, setMaxDevicesAllowed] = useState("1");
+  const { formData, updateField, clearForm } = usePreservedForm("vision_user_manager", {
+    username: "",
+    password: "",
+    isAdult: false,
+    maxDevicesAllowed: "1",
+  });
 
   const [submitting, setSubmitting] = useState(false);
-
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" | null }>({
     message: "",
@@ -31,8 +33,8 @@ export default function VisionUserManager() {
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
-    if (!username.trim()) errors.username = "Username required.";
-    if (!password.trim()) errors.password = "Password required.";
+    if (!formData.username.trim()) errors.username = "Username required.";
+    if (!formData.password.trim()) errors.password = "Password required.";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -47,10 +49,10 @@ export default function VisionUserManager() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: username.trim(),
-          password: password.trim(),
-          isAdult,
-          maxDevicesAllowed: parseInt(maxDevicesAllowed, 10),
+          username: formData.username.trim(),
+          password: formData.password.trim(),
+          isAdult: formData.isAdult,
+          maxDevicesAllowed: parseInt(formData.maxDevicesAllowed, 10),
         }),
       });
       const data = await response.json();
@@ -60,10 +62,7 @@ export default function VisionUserManager() {
           message: `Database Verified: "${data.user.username}" committed.`,
           type: "success",
         });
-        setUsername("");
-        setPassword("");
-        setIsAdult(false);
-        setMaxDevicesAllowed("1");
+        clearForm();
         setFormErrors({});
       } else {
         setToast({ message: data.error || "Database commit failed.", type: "error" });
@@ -85,30 +84,30 @@ export default function VisionUserManager() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <FormInput
             label="Username"
-            value={username}
-            onChange={setUsername}
+            value={formData.username}
+            onChange={(val) => updateField("username", val)}
             placeholder="e.g., newuser123"
             error={formErrors.username}
           />
           <FormInput
             label="Password"
             type="password"
-            value={password}
-            onChange={setPassword}
+            value={formData.password}
+            onChange={(val) => updateField("password", val)}
             placeholder="••••••••"
             error={formErrors.password}
           />
           <RatingToggle
             label="Profile Age Restriction"
             toggleLabel="Child Profile (Restricted)"
-            isActive={!isAdult}
-            onToggle={() => setIsAdult(!isAdult)}
+            isActive={!formData.isAdult}
+            onToggle={() => updateField("isAdult", !formData.isAdult)}
           />
 
           <DeviceSelector
             label="Max Allowed Devices"
-            value={maxDevicesAllowed}
-            onChange={setMaxDevicesAllowed}
+            value={formData.maxDevicesAllowed}
+            onChange={(val) => updateField("maxDevicesAllowed", val)}
           />
 
           <button
@@ -128,7 +127,7 @@ export default function VisionUserManager() {
         </form>
       </div>
 
-
     </main>
   );
 }
+

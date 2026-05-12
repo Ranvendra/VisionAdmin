@@ -1,22 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loader2, UserPlus } from "lucide-react";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { Header } from "../components/Header";
 import { Toast } from "../components/Toast";
 import { FormInput } from "../components/FormInput";
 import { RatingToggle } from "../components/RatingToggle";
 import { SegmentedControl } from "../components/SegmentedControl";
+import { usePreservedForm } from "@/hooks/usePreservedForm";
 
 export default function VisionStreamManager() {
-  const [tmdbId, setTmdbId] = useState("");
-  const [name, setName] = useState("");
-  const [type, setType] = useState<"movie" | "series">("movie");
-  const [isAdult, setIsAdult] = useState(false);
-  const [url, setUrl] = useState("");
-  const [seasonNumber, setSeasonNumber] = useState("");
-  const [episodeNumber, setEpisodeNumber] = useState("");
+  const { formData, updateField, clearForm } = usePreservedForm("vision_stream_manager", {
+    tmdbId: "",
+    name: "",
+    type: "movie" as "movie" | "series",
+    isAdult: false,
+    url: "",
+    seasonNumber: "",
+    episodeNumber: "",
+  });
 
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
@@ -30,7 +32,9 @@ export default function VisionStreamManager() {
   }, [toast]);
 
   const validateForm = () => {
+    const { tmdbId, name, url, type, seasonNumber, episodeNumber } = formData;
     const errors: { [key: string]: string } = {};
+    
     if (!tmdbId.trim()) errors.tmdbId = "TMDb ID required.";
     else if (!/^\d+$/.test(tmdbId.trim())) errors.tmdbId = "Digits only.";
 
@@ -58,14 +62,22 @@ export default function VisionStreamManager() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tmdbId: tmdbId.trim(), name: name.trim(), type, isAdult, url: url.trim(),
-          ...(type === "series" ? { seasonNumber: parseInt(seasonNumber), episodeNumber: parseInt(episodeNumber) } : {}),
+          tmdbId: formData.tmdbId.trim(), 
+          name: formData.name.trim(), 
+          type: formData.type, 
+          isAdult: formData.isAdult, 
+          url: formData.url.trim(),
+          ...(formData.type === "series" ? { 
+            seasonNumber: parseInt(formData.seasonNumber), 
+            episodeNumber: parseInt(formData.episodeNumber) 
+          } : {}),
         }),
       });
       const data = await response.json();
       if (response.ok && data.success) {
         setToast({ message: `Database Verified: "${data.stream.name}" committed.`, type: "success" });
-        setTmdbId(""); setName(""); setUrl(""); setSeasonNumber(""); setEpisodeNumber(""); setFormErrors({});
+        clearForm();
+        setFormErrors({});
       } else {
         setToast({ message: data.error || "Database commit failed.", type: "error" });
       }
@@ -81,15 +93,54 @@ export default function VisionStreamManager() {
       <div className="w-full max-w-lg bg-white border border-zinc-200/60 rounded-[32px] p-6 sm:p-10 shadow-[0_16px_48px_rgba(0,0,0,0.02)]">
         <Header />
         <form onSubmit={handleSubmit} className="space-y-5">
-          <FormInput label="TMDb ID" value={tmdbId} onChange={setTmdbId} placeholder="e.g., 1327819" error={formErrors.tmdbId} />
-          <FormInput label="Content Name" value={name} onChange={setName} placeholder="e.g., Dhurandhar" error={formErrors.name} />
-          <FormInput label="Stream URL" value={url} onChange={setUrl} placeholder="https://example.com/stream.mp4" error={formErrors.url} />
-          <RatingToggle label="Content Rating" isActive={isAdult} onToggle={() => setIsAdult(!isAdult)} />
-          <SegmentedControl label="Content Type" value={type} onChange={setType} />
-          {type === "series" && (
+          <FormInput 
+            label="TMDb ID" 
+            value={formData.tmdbId} 
+            onChange={(val) => updateField("tmdbId", val)} 
+            placeholder="e.g., 1327819" 
+            error={formErrors.tmdbId} 
+          />
+          <FormInput 
+            label="Content Name" 
+            value={formData.name} 
+            onChange={(val) => updateField("name", val)} 
+            placeholder="e.g., Dhurandhar" 
+            error={formErrors.name} 
+          />
+          <FormInput 
+            label="Stream URL" 
+            value={formData.url} 
+            onChange={(val) => updateField("url", val)} 
+            placeholder="https://example.com/stream.mp4" 
+            error={formErrors.url} 
+          />
+          <RatingToggle 
+            label="Content Rating" 
+            isActive={formData.isAdult} 
+            onToggle={() => updateField("isAdult", !formData.isAdult)} 
+          />
+          <SegmentedControl 
+            label="Content Type" 
+            value={formData.type} 
+            onChange={(val) => updateField("type", val)} 
+          />
+          
+          {formData.type === "series" && (
             <div className="grid grid-cols-2 gap-3 mt-2">
-              <FormInput label="Season" value={seasonNumber} onChange={setSeasonNumber} placeholder="e.g., 1" error={formErrors.seasonNumber} />
-              <FormInput label="Episode" value={episodeNumber} onChange={setEpisodeNumber} placeholder="e.g., 5" error={formErrors.episodeNumber} />
+              <FormInput 
+                label="Season" 
+                value={formData.seasonNumber} 
+                onChange={(val) => updateField("seasonNumber", val)} 
+                placeholder="e.g., 1" 
+                error={formErrors.seasonNumber} 
+              />
+              <FormInput 
+                label="Episode" 
+                value={formData.episodeNumber} 
+                onChange={(val) => updateField("episodeNumber", val)} 
+                placeholder="e.g., 5" 
+                error={formErrors.episodeNumber} 
+              />
             </div>
           )}
           <button type="submit" disabled={loading} className="w-full py-4 px-6 rounded-2xl font-bold text-sm text-white bg-[#34c759] hover:bg-[#30b651] active:scale-[0.97] transition-all duration-150 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(52,199,89,0.15)] cursor-pointer">
@@ -101,3 +152,4 @@ export default function VisionStreamManager() {
     </main>
   );
 }
+
