@@ -9,12 +9,12 @@ interface HeaderProps {
 
 export const Header = memo(({ title = "Vision Stream Manager", subtitle = "Admin Sync Suite" }: HeaderProps) => {
   return (
-    <header className="text-center mb-8">
+    <header className="text-center mb-5 sm:mb-8">
       {/* iOS App Icon Branding (Glossy 3D Ribbon Play Icon) */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-4 sm:mb-6">
         <svg
           viewBox="0 0 100 100"
-          className="w-20 h-20 filter drop-shadow-[0_4px_12px_rgba(138,0,255,0.08)] select-none"
+          className="w-16 h-16 sm:w-20 sm:h-20 filter drop-shadow-[0_4px_12px_rgba(138,0,255,0.08)] select-none"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -58,10 +58,10 @@ export const Header = memo(({ title = "Vision Stream Manager", subtitle = "Admin
         </svg>
       </div>
 
-      <h1 className="text-2xl font-extrabold text-zinc-900 tracking-tight leading-none">
+      <h1 className="text-xl sm:text-2xl font-extrabold text-zinc-900 tracking-tight leading-none">
         {title}
       </h1>
-      <p className="text-xs text-zinc-400 mt-1.5 font-semibold">
+      <p className="text-[10px] sm:text-xs text-zinc-400 mt-1.5 font-semibold">
         {subtitle}
       </p>
     </header>

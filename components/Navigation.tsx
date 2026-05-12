@@ -25,20 +25,18 @@ export const Navigation = memo(() => {
           <Link
             key={href}
             href={href}
-            className={`group relative flex items-center gap-2 px-4 py-2.5 sm:px-6 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ease-out active:scale-95 ${
+            className={`group relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 rounded-full text-[9px] sm:text-[11px] font-extrabold uppercase tracking-wider transition-all duration-300 ease-out active:scale-95 ${
               active
                 ? "bg-[#007AFF] text-white shadow-[0_4px_16px_-4px_rgba(0,122,255,0.4)]"
                 : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
             }`}
           >
             <Icon 
-              className={`w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 ${
+              className={`w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5 ${
                 active ? "fill-white/10 stroke-[2.5px]" : "opacity-60 group-hover:opacity-100"
               }`} 
             />
-            <span className="hidden xs:inline-block">{label}</span>
-            {/* Responsive view: only icons on smallest screens can be done by removing hidden xs:inline-block but let's keep it simple first. Oh, wait, actually just show text and optimize padding */}
-            <span className="sm:hidden">{/* Fallback if we decide to hide text, but currently I'll show both */}</span>
+            <span className="inline-block">{label}</span>
           </Link>
         ))}
       </div>

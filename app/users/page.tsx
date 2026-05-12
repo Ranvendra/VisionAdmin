@@ -75,10 +75,10 @@ export default function VisionUserManager() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto w-full flex flex-col items-center justify-center py-8 px-4 sm:px-6 md:px-8 antialiased bg-[#F5F5F7]">
+    <main className="flex-1 overflow-y-auto w-full flex flex-col items-center px-4 py-6 sm:py-12 md:px-8 antialiased bg-[#F5F5F7]">
       <Toast message={toast.message} type={toast.type} onDismiss={() => setToast({ message: "", type: null })} />
 
-      <div className="w-full max-w-lg bg-white border border-zinc-200/60 rounded-[32px] p-6 sm:p-10 shadow-[0_16px_48px_rgba(0,0,0,0.02)]">
+      <div className="my-auto w-full max-w-lg bg-white border border-zinc-200/60 rounded-[24px] sm:rounded-[32px] p-5 sm:p-10 shadow-[0_16px_48px_rgba(0,0,0,0.02)]">
         <Header title="Vision User Manager" subtitle="Profile Index Control" />
 
         <form onSubmit={handleSubmit} className="space-y-5">

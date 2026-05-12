@@ -22,13 +22,14 @@ export const DeviceSelector = memo(({ label, value, onChange }: DeviceSelectorPr
             key={opt}
             type="button"
             onClick={() => onChange(opt)}
-            className={`flex-1 py-1.5 rounded-xl text-xs font-bold flex items-center justify-center transition-all duration-150 cursor-pointer ${
+            className={`flex-1 py-1.5 rounded-xl text-[10px] sm:text-xs font-bold flex items-center justify-center transition-all duration-150 cursor-pointer whitespace-nowrap gap-1 ${
               value === opt
                 ? "bg-white text-zinc-900 shadow-sm"
                 : "text-zinc-500 hover:text-zinc-800"
             }`}
           >
-            {opt} {opt === "1" ? "Device" : "Devices"}
+            <span>{opt}</span>
+            <span className="hidden sm:inline">{opt === "1" ? "Device" : "Devices"}</span>
           </button>
         ))}
       </div>

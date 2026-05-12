@@ -126,16 +126,17 @@ export default function MediaRequestsDashboard() {
                 <div className="flex items-center gap-2"><div className="h-1.5 w-1.5 rounded-full bg-[#34C759] animate-pulse" /><span className="text-[9px] font-extrabold tracking-[0.15em] text-zinc-400 uppercase">Queue: {pagination.total}</span></div>
               </div>
 
-              <div className="flex-1 grid grid-rows-3 gap-2.5 min-h-0 relative w-full">
+              <div className="flex-1 flex flex-col gap-3 overflow-y-auto custom-scrollbar pr-1 pb-2 -mx-2 px-2 min-h-0">
                 {requests.map((req, idx) => (
-                  <RequestCard 
-                    key={req._id} 
-                    req={req} 
-                    idx={idx} 
-                    isFulfilling={fulfillingIds.has(req._id)} 
-                    onFulfill={handleFulfill} 
-                    formatDate={formatDate} 
-                  />
+                  <div key={req._id} className="shrink-0 min-h-[110px]">
+                    <RequestCard 
+                      req={req} 
+                      idx={idx} 
+                      isFulfilling={fulfillingIds.has(req._id)} 
+                      onFulfill={handleFulfill} 
+                      formatDate={formatDate} 
+                    />
+                  </div>
                 ))}
               </div>
             </div>
